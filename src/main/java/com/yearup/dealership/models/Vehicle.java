@@ -26,6 +26,9 @@ public class Vehicle {
         this.price = price;
     }
 
+    public Vehicle(double minPrice, double maxPrice) {
+    }
+
     public String getVin() {
         return vin;
     }

@@ -15,7 +15,26 @@ public class VehicleDao {
     }
 
     public void addVehicle(Vehicle vehicle) {
-        // TODO: Implement the logic to add a vehicle
+        try(Connection connection = dataSource.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO vehicle (Vehicle) values(?,?,?,?,?,?,?,?,?);")){
+            preparedStatement.setString(1, vehicle.getVin());
+            preparedStatement.setString(2, vehicle.getMake());
+            preparedStatement.setString(3, vehicle.getModel());
+            preparedStatement.setInt(4, vehicle.getYear());
+            preparedStatement.setBoolean(5, vehicle.isSold());
+            preparedStatement.setString(6, vehicle.getColor());
+            preparedStatement.setString(7, vehicle.getVehicleType());
+            preparedStatement.setInt(8, vehicle.getOdometer());
+            preparedStatement.setDouble(9, vehicle.getPrice());
+
+            int rows = preparedStatement.executeUpdate();
+
+            System.out.println("Rows updated: " + rows);
+
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+
     }
 
     public void removeVehicle(String VIN) {
@@ -23,8 +42,31 @@ public class VehicleDao {
     }
 
     public List<Vehicle> searchByPriceRange(double minPrice, double maxPrice) {
-        // TODO: Implement the logic to search vehicles by price range
-        return new ArrayList<>();
+        List<Vehicle> priceRangeList = new ArrayList<>();
+
+        try(Connection connection = dataSource.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT MIN(`price`) AS `minPrice`, Max(`price`) As `maxPrice`" +
+                    "FROM vehicles WHERE `price` BETWEEN ? AND ? ")){
+            preparedStatement.setDouble(1, minPrice);
+            preparedStatement.setDouble(2, maxPrice);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()){
+                while (resultSet.next()){
+                    double minPrice1 = resultSet.getDouble("minPrice");
+                    double maxPrice1 = resultSet.getDouble("maxPrice");
+
+                    Vehicle vehicle = new Vehicle(minPrice1, maxPrice1);
+                    priceRangeList.add(vehicle);
+
+                }
+
+            }
+
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        return priceRangeList;
     }
 
     public List<Vehicle> searchByMakeModel(String make, String model) {
