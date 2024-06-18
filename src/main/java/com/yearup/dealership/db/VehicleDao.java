@@ -39,6 +39,22 @@ public class VehicleDao {
 
     public void removeVehicle(String VIN) {
         // TODO: Implement the logic to remove a vehicle
+        String deleteQuery = "DELETE FROM vehicles WHERE vin = ?";
+
+        try (Connection connection = dataSource.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery)){
+            preparedStatement.setString(1, VIN);
+             int rows = preparedStatement.executeUpdate();
+
+             if (rows > 0){
+                 System.out.println("Vehicle with VIN" + VIN + "removed from the database.");
+             } else {
+                 System.out.println("No vehicle found with VIN" + VIN + "");
+             }
+
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 
     public List<Vehicle> searchByPriceRange(double minPrice, double maxPrice) {
