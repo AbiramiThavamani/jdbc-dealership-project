@@ -192,13 +192,70 @@ public class VehicleDao {
     }
 
     public List<Vehicle> searchByMileageRange(int minMileage, int maxMileage) {
-        // TODO: Implement the logic to search vehicles by mileage range
-        return new ArrayList<>();
+        List<Vehicle> mileageRangeList = new ArrayList<>();
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM vehicles WHERE vehicles.Odometer BETWEEN ? AND ?;")) {
+            preparedStatement.setInt(1, minMileage);
+            preparedStatement.setInt(2, maxMileage);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    String setupVIN = resultSet.getString("VIN");
+                    String setupMake = resultSet.getString("make");
+                    String setupModel = resultSet.getString("model");
+                    int setupYear = resultSet.getInt("year");
+                    boolean isSold = resultSet.getBoolean("SOLD");
+                    String setupColor = resultSet.getString("Color");
+                    String setupVehicleType = resultSet.getString("VehicleType");
+                    int setupOdometer = resultSet.getInt("Odometer");
+                    double setupPrice = resultSet.getDouble("price");
+
+                    Vehicle vehicle = new Vehicle(setupVIN, setupMake, setupModel, setupYear, isSold, setupColor, setupVehicleType, setupOdometer, setupPrice);
+                    mileageRangeList.add(vehicle);
+
+                }
+            }
+
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        return mileageRangeList ;
     }
 
     public List<Vehicle> searchByType(String type) {
-        // TODO: Implement the logic to search vehicles by type
-        return new ArrayList<>();
+        List<Vehicle> vehicleTypeList = new ArrayList<>();
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM vehicles WHERE vehicles.VehicleType LIKE ?;")) {
+            preparedStatement.setString(1, type);
+
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    String setupVIN = resultSet.getString("VIN");
+                    String setupMake = resultSet.getString("make");
+                    String setupModel = resultSet.getString("model");
+                    int setupYear = resultSet.getInt("year");
+                    boolean isSold = resultSet.getBoolean("SOLD");
+                    String setupColor = resultSet.getString("Color");
+                    String setupVehicleType = resultSet.getString("VehicleType");
+                    int setupOdometer = resultSet.getInt("Odometer");
+                    double setupPrice = resultSet.getDouble("price");
+
+                    Vehicle vehicle = new Vehicle(setupVIN, setupMake, setupModel, setupYear, isSold, setupColor, setupVehicleType, setupOdometer, setupPrice);
+                    vehicleTypeList.add(vehicle);
+
+
+                }
+            }
+
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+
+
+
+        return vehicleTypeList;
     }
 
     private Vehicle createVehicleFromResultSet(ResultSet resultSet) throws SQLException {
