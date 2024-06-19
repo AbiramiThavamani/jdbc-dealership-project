@@ -3,6 +3,7 @@ package com.yearup.dealership.db;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class InventoryDao {
@@ -13,10 +14,29 @@ public class InventoryDao {
     }
 
     public void addVehicleToInventory(String vin, int dealershipId) {
-        // TODO: Implement the logic to add a vehicle to the inventory
+        try (Connection connection = dataSource.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO inventory (dealership_id,VIN) VALUES (?,?)",
+                PreparedStatement.RETURN_GENERATED_KEYS)) {
+
+            preparedStatement.setInt(1, dealershipId);
+            preparedStatement.setString(2, vin);
+            preparedStatement.executeUpdate();
+
+            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()){
+                if (generatedKeys.next()){
+                    int dealership = generatedKeys.getInt(1);
+                    String vehicleId = generatedKeys.getString(2);
+                    System.out.println("The Vehicle with vin: " + vehicleId + "was added to the dealership with id:" + dealership);
+                }
+
+            }
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 
     public void removeVehicleFromInventory(String vin) {
-        // TODO: Implement the logic to remove a vehicle from the inventory
+        
     }
 }
