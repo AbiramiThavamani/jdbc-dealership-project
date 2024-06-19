@@ -38,7 +38,7 @@ public class VehicleDao {
     }
 
     public void removeVehicle(String VIN) {
-        // TODO: Implement the logic to remove a vehicle
+
         String deleteQuery = "REMOVE FROM vehicles WHERE VIN LIKE = ?";
 
         try (Connection connection = dataSource.getConnection();
@@ -92,10 +92,10 @@ public class VehicleDao {
     }
 
     public List<Vehicle> searchByMakeModel(String make, String model) {
-        // TODO: Implement the logic to search vehicles by make and model
+
         List<Vehicle> makeModelList = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM vehicles WHERE make LIKE ? AND model LIKE ?")) {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM vehicles WHERE vehicles.make LIKE ? AND vehicles.model LIKE ?;")) {
             preparedStatement.setString(1, make);
             preparedStatement.setString(2, model);
 
@@ -125,8 +125,36 @@ public class VehicleDao {
     }
 
     public List<Vehicle> searchByYearRange(int minYear, int maxYear) {
-        // TODO: Implement the logic to search vehicles by year range
-        return new ArrayList<>();
+        List<Vehicle> yearRangeList = new ArrayList<>();
+        try (Connection connection = dataSource.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM vehicles WHERE vehicles.year BETWEEN ? AND ?;")) {
+            preparedStatement.setInt(1, minYear);
+            preparedStatement.setInt(2, maxYear);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    String setupVIN = resultSet.getString("VIN");
+                    String setupMake = resultSet.getString("make");
+                    String setupModel = resultSet.getString("model");
+                    int setupYear = resultSet.getInt("year");
+                    boolean isSold = resultSet.getBoolean("SOLD");
+                    String setupColor = resultSet.getString("Color");
+                    String setupVehicleType = resultSet.getString("VehicleType");
+                    int setupOdometer = resultSet.getInt("Odometer");
+                    double setupPrice = resultSet.getDouble("price");
+
+                    Vehicle vehicle = new Vehicle(setupVIN, setupMake, setupModel, setupYear, isSold, setupColor, setupVehicleType, setupOdometer, setupPrice);
+                    yearRangeList.add(vehicle);
+
+                }
+            }
+
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+
+
+        return yearRangeList;
     }
 
     public List<Vehicle> searchByColor(String color) {
