@@ -39,7 +39,7 @@ public class VehicleDao {
 
     public void removeVehicle(String VIN) {
         // TODO: Implement the logic to remove a vehicle
-        String deleteQuery = "DELETE FROM vehicles WHERE vin = ?";
+        String deleteQuery = "REMOVE FROM vehicles WHERE VIN LIKE = ?";
 
         try (Connection connection = dataSource.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery)){
@@ -61,17 +61,23 @@ public class VehicleDao {
         List<Vehicle> priceRangeList = new ArrayList<>();
 
         try(Connection connection = dataSource.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT MIN(`price`) AS `minPrice`, Max(`price`) As `maxPrice`" +
-                    "FROM vehicles WHERE `price` BETWEEN ? AND ? ")){
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM vehicles WHERE price BETWEEN ? AND ?")){
             preparedStatement.setDouble(1, minPrice);
             preparedStatement.setDouble(2, maxPrice);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()){
                 while (resultSet.next()){
-                    double minPrice1 = resultSet.getDouble("minPrice");
-                    double maxPrice1 = resultSet.getDouble("maxPrice");
+                    String setupVIN = resultSet.getString("VIN");
+                    String setupMake = resultSet.getString("make");
+                    String setupModel = resultSet.getString("model");
+                    int setupYear = resultSet.getInt("year");
+                    boolean isSold = resultSet.getBoolean("SOLD");
+                    String setupColor = resultSet.getString("Color");
+                    String setupVehicleType = resultSet.getString("VehicleType");
+                    int setupOdometer = resultSet.getInt("Odometer");
+                    double setupPrice = resultSet.getDouble("price");
 
-                    Vehicle vehicle = new Vehicle(minPrice1, maxPrice1);
+                    Vehicle vehicle = new Vehicle(setupVIN, setupMake, setupModel, setupYear, isSold, setupColor, setupVehicleType, setupOdometer, setupPrice);
                     priceRangeList.add(vehicle);
 
                 }
