@@ -37,6 +37,13 @@ public class InventoryDao {
     }
 
     public void removeVehicleFromInventory(String vin) {
-        
+        try (Connection connection = dataSource.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM inventory WHERE VIN = ?")) {
+            preparedStatement.setString(1, vin);
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 }

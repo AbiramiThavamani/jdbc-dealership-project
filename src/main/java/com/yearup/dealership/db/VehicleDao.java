@@ -28,7 +28,7 @@ public class VehicleDao {
             preparedStatement.setDouble(9, vehicle.getPrice());
 
             int rows = preparedStatement.executeUpdate();
-
+            System.out.println("\nVehicle added.");
             System.out.println("Rows updated: " + rows);
 
         } catch (SQLException e){
@@ -39,18 +39,14 @@ public class VehicleDao {
 
     public void removeVehicle(String VIN) {
 
-        String deleteQuery = "REMOVE FROM vehicles WHERE VIN LIKE = ?";
-
         try (Connection connection = dataSource.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery)){
+        PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM vehicles WHERE VIN LIKE = ?;")){
             preparedStatement.setString(1, VIN);
-             int rows = preparedStatement.executeUpdate();
 
-             if (rows > 0){
-                 System.out.println("Vehicle with VIN" + VIN + "removed from the database.");
-             } else {
-                 System.out.println("No vehicle found with VIN" + VIN + "");
-             }
+             int rows = preparedStatement.executeUpdate();
+            System.out.println("\nVehicle removed.");
+            System.out.println("Rows updated: " + rows);
+
 
         } catch (SQLException e){
             e.printStackTrace();
