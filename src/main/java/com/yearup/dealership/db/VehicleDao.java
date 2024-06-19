@@ -16,7 +16,7 @@ public class VehicleDao {
 
     public void addVehicle(Vehicle vehicle) {
         try(Connection connection = dataSource.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO vehicle (Vehicle) values(?,?,?,?,?,?,?,?,?);")){
+        PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO vehicles VALUES (?,?,?,?,?,?,?,?,?);")){
             preparedStatement.setString(1, vehicle.getVin());
             preparedStatement.setString(2, vehicle.getMake());
             preparedStatement.setString(3, vehicle.getModel());
