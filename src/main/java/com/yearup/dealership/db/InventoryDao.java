@@ -15,23 +15,14 @@ public class InventoryDao {
 
     public void addVehicleToInventory(String vin, int dealershipId) {
         try (Connection connection = dataSource.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO inventory (dealership_id,VIN) VALUES (?,?)",
-                PreparedStatement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO inventory (dealership_id, VIN) VALUES (?,?)")) {
 
             preparedStatement.setInt(1, dealershipId);
             preparedStatement.setString(2, vin);
-            preparedStatement.executeUpdate();
 
-            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()){
-                if (generatedKeys.next()){
-                    int dealership = generatedKeys.getInt(1);
-                    String vehicleId = generatedKeys.getString(2);
-                    System.out.println("The Vehicle with vin: " + vehicleId + "was added to the dealership with id:" + dealership);
-                }
-
-            }
-
-        }catch (SQLException e){
+            int rows = preparedStatement.executeUpdate();
+            System.out.println("Rows inserted into inventory: " + rows);
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }

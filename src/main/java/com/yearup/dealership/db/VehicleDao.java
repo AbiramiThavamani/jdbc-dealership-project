@@ -14,9 +14,9 @@ public class VehicleDao {
         this.dataSource = dataSource;
     }
 
-    public void addVehicle(Vehicle vehicle) {
+    public void addVehicle(Vehicle vehicle ) {
         try(Connection connection = dataSource.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO vehicles VALUES (?,?,?,?,?,?,?,?,?);")){
+        PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO vehicles (VIN, make, model, year, SOLD, Color, VehicleType, Odometer, price) VALUES (?,?,?,?,?,?,?,?,?);")){
             preparedStatement.setString(1, vehicle.getVin());
             preparedStatement.setString(2, vehicle.getMake());
             preparedStatement.setString(3, vehicle.getModel());
@@ -97,17 +97,8 @@ public class VehicleDao {
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
-                    String setupVIN = resultSet.getString("VIN");
-                    String setupMake = resultSet.getString("make");
-                    String setupModel = resultSet.getString("model");
-                    int setupYear = resultSet.getInt("year");
-                    boolean isSold = resultSet.getBoolean("SOLD");
-                    String setupColor = resultSet.getString("Color");
-                    String setupVehicleType = resultSet.getString("VehicleType");
-                    int setupOdometer = resultSet.getInt("Odometer");
-                    double setupPrice = resultSet.getDouble("price");
 
-                    Vehicle vehicle = new Vehicle(setupVIN, setupMake, setupModel, setupYear, isSold, setupColor, setupVehicleType, setupOdometer, setupPrice);
+                    Vehicle vehicle = createVehicleFromResultSet(resultSet);
                     makeModelList.add(vehicle);
 
                 }
@@ -129,17 +120,8 @@ public class VehicleDao {
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
-                    String setupVIN = resultSet.getString("VIN");
-                    String setupMake = resultSet.getString("make");
-                    String setupModel = resultSet.getString("model");
-                    int setupYear = resultSet.getInt("year");
-                    boolean isSold = resultSet.getBoolean("SOLD");
-                    String setupColor = resultSet.getString("Color");
-                    String setupVehicleType = resultSet.getString("VehicleType");
-                    int setupOdometer = resultSet.getInt("Odometer");
-                    double setupPrice = resultSet.getDouble("price");
 
-                    Vehicle vehicle = new Vehicle(setupVIN, setupMake, setupModel, setupYear, isSold, setupColor, setupVehicleType, setupOdometer, setupPrice);
+                    Vehicle vehicle = createVehicleFromResultSet(resultSet);
                     yearRangeList.add(vehicle);
 
                 }
@@ -162,17 +144,8 @@ public class VehicleDao {
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
-                    String setupVIN = resultSet.getString("VIN");
-                    String setupMake = resultSet.getString("make");
-                    String setupModel = resultSet.getString("model");
-                    int setupYear = resultSet.getInt("year");
-                    boolean isSold = resultSet.getBoolean("SOLD");
-                    String setupColor = resultSet.getString("Color");
-                    String setupVehicleType = resultSet.getString("VehicleType");
-                    int setupOdometer = resultSet.getInt("Odometer");
-                    double setupPrice = resultSet.getDouble("price");
 
-                    Vehicle vehicle = new Vehicle(setupVIN, setupMake, setupModel, setupYear, isSold, setupColor, setupVehicleType, setupOdometer, setupPrice);
+                    Vehicle vehicle = createVehicleFromResultSet(resultSet);
                     colorList.add(vehicle);
 
 
@@ -196,17 +169,7 @@ public class VehicleDao {
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
-                    String setupVIN = resultSet.getString("VIN");
-                    String setupMake = resultSet.getString("make");
-                    String setupModel = resultSet.getString("model");
-                    int setupYear = resultSet.getInt("year");
-                    boolean isSold = resultSet.getBoolean("SOLD");
-                    String setupColor = resultSet.getString("Color");
-                    String setupVehicleType = resultSet.getString("VehicleType");
-                    int setupOdometer = resultSet.getInt("Odometer");
-                    double setupPrice = resultSet.getDouble("price");
-
-                    Vehicle vehicle = new Vehicle(setupVIN, setupMake, setupModel, setupYear, isSold, setupColor, setupVehicleType, setupOdometer, setupPrice);
+                    Vehicle vehicle = createVehicleFromResultSet(resultSet);
                     mileageRangeList.add(vehicle);
 
                 }
@@ -228,17 +191,7 @@ public class VehicleDao {
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
-                    String setupVIN = resultSet.getString("VIN");
-                    String setupMake = resultSet.getString("make");
-                    String setupModel = resultSet.getString("model");
-                    int setupYear = resultSet.getInt("year");
-                    boolean isSold = resultSet.getBoolean("SOLD");
-                    String setupColor = resultSet.getString("Color");
-                    String setupVehicleType = resultSet.getString("VehicleType");
-                    int setupOdometer = resultSet.getInt("Odometer");
-                    double setupPrice = resultSet.getDouble("price");
-
-                    Vehicle vehicle = new Vehicle(setupVIN, setupMake, setupModel, setupYear, isSold, setupColor, setupVehicleType, setupOdometer, setupPrice);
+                    Vehicle vehicle = createVehicleFromResultSet(resultSet);
                     vehicleTypeList.add(vehicle);
 
 
