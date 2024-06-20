@@ -35,15 +35,7 @@ Follow these steps to get your application running within IntelliJ IDEA:
 
 ## Demo
 
-<img src="">
-
-## Future Work
-
-Additional feature to be developed.
-- In feature keep track of each car maintenance history
-
-Improvement of current functionalities.
-- Provide receipt for sales Car.
+<img src="jdbc-dealership.gif">
 
 
 ## Resources

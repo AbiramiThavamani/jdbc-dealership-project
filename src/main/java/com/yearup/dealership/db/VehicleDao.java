@@ -40,7 +40,7 @@ public class VehicleDao {
     public void removeVehicle(String VIN) {
 
         try (Connection connection = dataSource.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM vehicles WHERE VIN LIKE = ?;")){
+        PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM vehicles WHERE VIN = ?;")){
             preparedStatement.setString(1, VIN);
 
              int rows = preparedStatement.executeUpdate();
